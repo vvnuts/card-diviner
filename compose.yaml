@@ -1,16 +1,4 @@
-version: '3'
-volumes:
-  db-data:
-    driver: local
 services:
-  app:
-    build:
-      context: .
-    container_name: backend
-    depends_on:
-      - db
-    ports:
-      - '8082:8082'
   postgres:
     image: 'postgres:latest'
     environment:
@@ -19,6 +7,3 @@ services:
       - 'POSTGRES_USER=myuser'
     ports:
       - '5432'
-    volumes:
-      - ./src/main/resources/data:/docker-entrypoint-initdb.d
-      - db-data:/var/lib/postgresql/data

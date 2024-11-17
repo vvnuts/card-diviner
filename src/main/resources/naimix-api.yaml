@@ -124,6 +124,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsersResponse'
+  /api/v1/users/all:
+    get:
+      tags:
+        - User
+      summary: Получить всех пользователей
+      description: Создание нового пользователя
+      operationId: getUsers
+      responses:
+        "201":
+          description: getAll
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
   /api/v1/users:
     post:
       tags:
@@ -252,6 +266,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CharacteristicCompanyResponse'
+  /api/v1/characteristics/{companyId}/:
+    post:
+      tags:
+        - Characteristic
+      summary: Добавить все характеристики к компании
+      description: Добавление характеристик к компании
+      operationId: addCharacteristicsToCompany
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Идентификатор компании.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacteristicValueRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CharacteristicCompanyResponse'
   /api/v1/cards:
     get:
       tags:
@@ -286,6 +330,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TrumpResponse'
+  /api/v1/trumps/all:
+    get:
+      tags:
+        - Trump
+      summary: Получить все расклады
+      description: все расклады
+      operationId: getTrumps
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrumpsResponse'
+  /api/v1/trumps/{trumpId}:
+    get:
+      tags:
+        - Trump
+      summary: Детализация
+      description: Полная информация по раскладу
+      operationId: getTrump
+      parameters:
+        - in: path
+          name: trumpId
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Идентификатор расклада
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrumpDetailResponse'
 components:
   schemas:
     CompaniesResponse:
@@ -344,7 +424,7 @@ components:
         roles:
           type: array
           items:
-            $ref: '#/components/schemas/RolesResponse'
+            $ref: '#/components/schemas/RoleResponse'
     UserRequest:
       type: object
       properties:
@@ -412,6 +492,11 @@ components:
         description:
           type: string
           description: Описание характеристики.
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionResponse'
+
     CharacteristicCompanyRequest:
       type: object
       properties:
@@ -420,6 +505,17 @@ components:
           description: значение характеристики
       required:
         - value
+    CharacteristicValueRequest:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+        values:
+          type: array
+          items:
+            type: integer
     CharacteristicCompanyResponse:
       type: object
       properties:
@@ -433,6 +529,15 @@ components:
         value:
           type: integer
           description: Значение характеристики по компании
+    QuestionResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор сущности
+        question:
+          type: string
+          description: Вопрос
     CardsResponse:
       type: object
       properties:
@@ -487,3 +592,72 @@ components:
         score:
           type: integer
           description: Итоговая совместимость
+    TrumpsResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrumpUserResponse'
+    TrumpUserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор расклада
+        score:
+          type: integer
+          description: Итоговая совместимость
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserDto"
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    TrumpDetailResponse:
+      type: object
+      properties:
+        trumpId:
+          type: integer
+          format: int64
+          description: идентификатор расклада
+        mainScore:
+          type: integer
+          description: процент совместимости от 0 до 100
+        cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrumpCardResponse'
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserDto'
+        characteristicValue:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrumpCharacteristicResponse'
+    TrumpCharacteristicResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        score:
+          type: integer
+          description: совместимость по характеристике от 0 до 100
+    TrumpCardResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string

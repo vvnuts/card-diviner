@@ -2,13 +2,7 @@ package ru.naimix.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.naimix.model.UserFilterRequest;
 import ru.naimix.model.UserRequest;
 import ru.naimix.model.UserResponse;
@@ -27,6 +21,11 @@ public class UserController {
     @PostMapping("/filter")
     public ResponseEntity<UsersResponse> filter(@RequestBody(required = false) UserFilterRequest userFilterRequest){
         var usersResponse = userService.filter(userFilterRequest);
+        return new ResponseEntity<>(usersResponse, OK);
+    }
+    @GetMapping("/all")
+    public ResponseEntity<UsersResponse> getAll() {
+        var usersResponse = userService.getAll();
         return new ResponseEntity<>(usersResponse, OK);
     }
     @PostMapping

@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.naimix.model.CharacteristicCompanyRequest;
 import ru.naimix.model.CharacteristicCompanyResponse;
+import ru.naimix.model.CharacteristicValueRequest;
 import ru.naimix.model.CharacteristicsResponse;
 import ru.naimix.service.CharacteristicService;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -34,5 +37,12 @@ public class CharacteristicController {
                 characteristicCompanyRequest
         );
         return new ResponseEntity<>(characteristicCompanyResponse, OK);
+    }
+
+    @PostMapping("{companyId}")
+    public ResponseEntity<List<CharacteristicCompanyResponse>> addCharacteristicsToCompany(@PathVariable("companyId") Long companyId,
+                                                            @RequestBody CharacteristicValueRequest characteristicValueRequest){
+        List<CharacteristicCompanyResponse> characteristicCompanyResponses = characteristicService.addCharacteristicsToCompany(companyId, characteristicValueRequest);
+        return new ResponseEntity<>(characteristicCompanyResponses, OK);
     }
 }

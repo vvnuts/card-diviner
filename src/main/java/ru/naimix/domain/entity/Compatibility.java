@@ -1,9 +1,6 @@
 package ru.naimix.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +15,7 @@ import javax.validation.constraints.Min;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Compatibility {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Min(0)
     @Max(100)

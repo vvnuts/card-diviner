@@ -48,7 +48,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company getCompanyForCharacteristic(Long companyId) {
+    public Company findCompanyById(Long companyId) {
         return companyRepository.findById(companyId)
                 .orElseThrow(() -> new IllegalArgumentException("Компания не найдена в БД"));
     }

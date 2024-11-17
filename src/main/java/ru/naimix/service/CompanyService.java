@@ -14,5 +14,5 @@ public interface CompanyService {
 
     void delete(Long companyId);
 
-    Company getCompanyForCharacteristic(Long companyId);
+    Company findCompanyById(Long companyId);
 }

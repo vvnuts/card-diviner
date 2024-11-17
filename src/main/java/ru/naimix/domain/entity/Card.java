@@ -1,14 +1,14 @@
 package ru.naimix.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,4 +28,7 @@ public class Card {
     @JsonProperty("desc")
     @Column(columnDefinition = "TEXT")
     String description;
+    @ManyToMany(mappedBy = "cards",
+            fetch = FetchType.LAZY)
+    private List<Trump> trumps;
 }

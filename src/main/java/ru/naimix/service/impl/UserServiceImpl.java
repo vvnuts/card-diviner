@@ -66,6 +66,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найдена в БД"));
     }
 
+    @Override
+    public UsersResponse getAll() {
+        var usersFromRepository = userRepository.findAll();
+        var usersForResponse = userMapper.toUserResponseList(usersFromRepository);
+        var usersResponse = new UsersResponse();
+        usersResponse.content(usersForResponse);
+        return usersResponse;
+    }
+
     private User setUserRole(User userFromRequest) {
         HashSet<Role> roles = new HashSet<>();
         Role employeeRole = new Role();

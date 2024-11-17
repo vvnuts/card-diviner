@@ -9,6 +9,8 @@ import ru.naimix.model.UsersResponse;
 public interface UserService {
     UsersResponse filter(UserFilterRequest userFilterRequest);
 
+    UsersResponse getAll();
+
     UserResponse create(UserRequest userRequest);
 
     void delete(Long userId);

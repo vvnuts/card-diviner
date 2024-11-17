@@ -9,6 +9,8 @@ import ru.naimix.domain.entity.Company;
 import ru.naimix.model.CharacteristicCompanyRequest;
 import ru.naimix.model.CharacteristicCompanyResponse;
 
+import java.util.List;
+
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CharacteristicCompanyMapper {
     @Mapping(target = "id", ignore = true)
@@ -17,4 +19,5 @@ public interface CharacteristicCompanyMapper {
     @Mapping(target = "value", source = "characteristicCompanyRequest.value")
     CharacteristicCompany toCharacteristicCompany(Characteristic characteristic, Company company, CharacteristicCompanyRequest characteristicCompanyRequest);
     CharacteristicCompanyResponse toCharacteristicCompanyResponse(CharacteristicCompany characteristicCompany);
+    List<CharacteristicCompanyResponse> toCharacteristicCompanyResponseList(List<CharacteristicCompany> characteristicCompanies);
 }

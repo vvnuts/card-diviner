@@ -1,15 +1,14 @@
 package ru.naimix.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,6 +16,7 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Trump {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     LocalDateTime date;
     int score;
@@ -29,4 +29,12 @@ public class Trump {
     @ManyToOne
     @JoinColumn(name = "company_from_id")
     private Company companyFrom;
+    @ManyToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "card_trump",
+            joinColumns = @JoinColumn(name = "trump_id"),
+            inverseJoinColumns = @JoinColumn(name = "card_id"))
+    private List<Card> cards;
 }
