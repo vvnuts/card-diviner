@@ -1,0 +1,489 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: API для карт ТАРО
+  description: API для работы с картами Таро.
+  contact:
+    name: Vlad Semenov
+    url: https://t.me/ProstoVladTut
+    email: ooovladislavchik@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: User
+    description: Методы для работы с пользователями с ролями
+  - name: Company
+    description: Методы для работы с компаниями
+  - name: Role
+    description: Методы для работы с ролями
+  - name: Characteristic
+    description: Методы для работы с характеристиками
+  - name: Card
+    description: Методы для работы с картой
+  - name: Trump
+    description: Методы для работы с раскладом
+servers:
+  - url: http://localhost:8092
+    description: URL для локального запуска
+paths:
+  /api/v1/companies:
+    post:
+      tags:
+        - Company
+      summary: Создать компанию
+      description: Создание новой компании
+      operationId: createCompany
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponse'
+    get:
+      tags:
+        - Company
+      summary: Получить все компании
+      description: Получение всех компаний
+      operationId: getCompany
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompaniesResponse'
+  /api/v1/companies/{companyId}:
+    patch:
+      tags:
+        - Company
+      summary: Изменить компанию
+      description: Изменение компании по идентификатору
+      operationId: updateCompany
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Идентификатор компании
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponse'
+    delete:
+      tags:
+        - Company
+      summary: Удалить компанию
+      description: Удаление компании по идентификатору
+      operationId: deleteCompany
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Идентификатор компании
+      responses:
+        "204":
+          description: No Content
+  /api/v1/users/filter:
+    post:
+      tags:
+        - User
+      summary: Получить всех пользователей c фильтром
+      description: Получение всех пользователей
+      operationId: getUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserFilterRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+  /api/v1/users:
+    post:
+      tags:
+        - User
+      summary: Создать пользователя
+      description: Создание нового пользователя
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /api/v1/users/{userId}:
+    delete:
+      tags:
+        - User
+      summary: Удаление пользователя по id
+      description: Удаление пользователя по идентификатору
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Идентификатор пользователя
+      responses:
+        "204":
+          description: No Content
+    patch:
+      tags:
+        - User
+      summary: Изменение user
+      description: Изменение пользователя по id
+      operationId: updateUser
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Идентификатор пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+  /api/v1/roles:
+    get:
+      tags:
+        - Role
+      summary: Получить все роли
+      description: Получение всех ролей
+      operationId: getRole
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RolesResponse'
+  /api/v1/characteristics:
+    get:
+      tags:
+        - Characteristic
+      summary: Получить все характеристики
+      description: Получение всех характеристик
+      operationId: getCharacteristic
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacteristicsResponse'
+  /api/v1/characteristics/{characteristicId}/company/{companyId}:
+    post:
+      tags:
+        - Characteristic
+      summary: Добавить характеристику к компании
+      description: Добавление характеристики к компании
+      operationId: addCharacteristicToCompany
+      parameters:
+        - in: path
+          name: characteristicId
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Идентификатор характеристики.
+        - in: path
+          name: companyId
+          required: true
+          schema:
+            type: integer
+            format: int64
+            description: Идентификатор компании.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacteristicCompanyRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacteristicCompanyResponse'
+  /api/v1/cards:
+    get:
+      tags:
+        - Card
+      summary: Получить все карты
+      description: Получение всех карт
+      operationId: getCard
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardsResponse'
+  /api/v1/trumps:
+    post:
+      tags:
+        - Trump
+      summary: Создать расклад - завершить
+      description: Создание нового расклада
+      operationId: createTrump
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrumpRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrumpResponse'
+components:
+  schemas:
+    CompaniesResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyResponse'
+    CompanyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор компании.
+        name:
+          type: string
+          description: Название компании.
+        phone:
+          type: string
+          description: Телефон компании.
+        email:
+          type: string
+          description: Email компании.
+        address:
+          type: string
+          description: Адрес компании
+      required:
+        - id
+        - name
+    UserFilterRequest:
+      type: object
+      properties:
+        role:
+          type: string
+          description: Фильтрация по роли.
+    UsersResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор пользователя
+        name:
+          type: string
+          description: Имя пользователя
+        phone:
+          type: string
+          description: Телефон пользователя
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RolesResponse'
+    UserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Имя пользователя
+        phone:
+          type: string
+          description: Телефон пользователя
+    RolesResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponse'
+    RoleResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор роли.
+        name:
+          type: string
+          description: Название роли.
+      required:
+        - id
+        - name
+    CompanyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Название компании.
+        phone:
+          type: string
+          description: Телефон компании.
+        email:
+          type: string
+          description: Email компании.
+        address:
+          type: string
+          description: Адрес компании.
+      required:
+        - name
+        - phone
+        - email
+        - address
+    CharacteristicsResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicResponse'
+    CharacteristicResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор характеристики.
+        name:
+          type: string
+          description: Название характеристики.
+        description:
+          type: string
+          description: Описание характеристики.
+    CharacteristicCompanyRequest:
+      type: object
+      properties:
+        value:
+          type: integer
+          description: значение характеристики
+      required:
+        - value
+    CharacteristicCompanyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор сущности
+        company:
+          $ref: '#/components/schemas/CompanyResponse'
+        characteristic:
+          $ref: '#/components/schemas/CharacteristicResponse'
+        value:
+          type: integer
+          description: Значение характеристики по компании
+    CardsResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardResponse'
+    CardResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: ID
+        name:
+          type: string
+          description: Название карты
+        meaningUp:
+          type: string
+        meaningRev:
+          type: string
+        description:
+          type: string
+          description: Описание
+    TrumpRequest:
+      type: object
+      properties:
+        isCompany:
+          type: boolean
+          description: Является ли расклад для компании
+        targetToId:
+          type: integer
+          format: int64
+          description: Идентификатор
+        targetFromId:
+          type: integer
+          format: int64
+          description: Идентификатор
+        cards:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: Список карт, извлеченных в раскладе
+    TrumpResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор расклада
+        score:
+          type: integer
+          description: Итоговая совместимость
